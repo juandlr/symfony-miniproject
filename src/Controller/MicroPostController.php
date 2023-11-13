@@ -53,9 +53,7 @@ class MicroPostController extends AbstractController
     #[Route('/micro-post/add', name: 'app_micro_post_add', priority: 2)]
     public function add(Request $request, EntityManagerInterface $manager): Response
     {
-        $microPost = new MicroPost();
         $form = $this->createForm(MicroPostType::class, new MicroPost());
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -80,7 +78,7 @@ class MicroPostController extends AbstractController
     #[Route('/micro-post/{post}/edit', name: 'app_micro_post_edit')]
     public function edit(MicroPost $post, Request $request, EntityManagerInterface $manager): Response
     {
-        $form = $this->createForm(MicroPostType::class, $post);
+        $form = $this->createFormBuilder(MicroPostType::class, $post);
 
         $form->handleRequest($request);
 
