@@ -44,16 +44,16 @@ class HelloController extends AbstractController
         $post->setCreated(new \DateTime());*/
 
 
-        $post = $posts->find(11);
+//        $post = $posts->find(15);
         /* $comment = new Comment();
         $comment->setText('Hello 1');
         $post->addComment($comment);*/
 
-        $comment = $post->getComments()[0];
+        /*$comment = $post->getComments()[0];
         $post->removeComment($comment);
 
         $manager->persist($post);
-        $manager->flush();
+        $manager->flush();*/
 
 
         return $this->render(
