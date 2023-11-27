@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\User;
 use App\Entity\MicroPost;
 use App\Form\CommentType;
 use App\Form\MicroPostType;
@@ -19,29 +20,56 @@ class MicroPostController extends AbstractController
     #[Route('/micro-post', name: 'app_micro_post')]
     public function index(EntityManagerInterface $manager, MicroPostRepository $posts): Response
     {
-//        dd($posts->findAll());
-//        $microPost = new MicroPost();
-//        $microPost->setTitle('It comes from controller');
-//        $microPost->setText('Hi!');
-//        $microPost->setCreated(new \DateTime());
+        /*dd($posts->findAll());
+        $microPost = new MicroPost();
+        $microPost->setTitle('It comes from controller');
+        $microPost->setText('Hi!');
+        $microPost->setCreated(new \DateTime());
 
-        // save
-//        $manager->persist($microPost);
-//        $manager->flush();
+         save
+        $manager->persist($microPost);
+        $manager->flush();
 
-        // update
-//        $microPost = $posts->find(3);
-//        $microPost->setTitle('Welcome in General!');
-//        $manager->flush();
+         update
+        $microPost = $posts->find(3);
+        $microPost->setTitle('Welcome in General!');
+        $manager->flush();
 
-        // remove
-//        $manager->remove($microPost);
-//        $manager->flush();
+         remove
+        $manager->remove($microPost);
+        $manager->flush();*/
 
 
         return $this->render('micro_post/index.html.twig', [
             'posts' => $posts->findAllWithComments(),
         ]);
+    }
+
+    #[Route('/micro-post/top-liked', name: 'app_micro_post_topliked')]
+    public function topLiked(MicroPostRepository $posts): Response
+    {
+        return $this->render(
+            'micro_post/top_liked.html.twig',
+            [
+                'posts' => $posts->findAllWithMinLikes(2),
+            ]
+        );
+    }
+
+    #[Route('/micro-post/follows', name: 'app_micro_post_follows')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function follows(MicroPostRepository $posts): Response
+    {
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        return $this->render(
+            'micro_post/follows.html.twig',
+            [
+                'posts' => $posts->findAllByAuthors(
+                    $currentUser->getFollows()
+                ),
+            ]
+        );
     }
 
     #[Route('/micro-post/{post}', name: 'app_micro_post_show')]
