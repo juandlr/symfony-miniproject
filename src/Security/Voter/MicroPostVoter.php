@@ -44,8 +44,14 @@ class MicroPostVoter extends Voter
                     ($subject->getAuthor()->getId() === $user->getId()) ||
                     $this->security->isGranted('ROLE_EDITOR')
                 ),
-            MicroPost::VIEW => true,
-            default => false,
+            MicroPost::VIEW => !$subject->isExtraPrivacy() ||
+                ($isAuth &&
+                    (
+                        $subject->getAuthor()->getId() === $user->getId() ||
+                        $subject->getAuthor()->getFollows()->contains($user)
+                    )
+                ),
+            default => false, // You might want to handle other cases explicitly
         };
 
     }

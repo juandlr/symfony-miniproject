@@ -25,7 +25,9 @@
         <a href="{{ path('app_profile', { id: post.author.id }) }}">{{ post.author.email }}</a>
     </div>
     <div class="flex">
-        <a href="{{ path('app_micro_post_edit', {post: post.id}) }}" class="mr-2">Edit</a>
+        {% if post.author == app.user %}
+            <a href="{{ path('app_micro_post_edit', {post: post.id}) }}" class="mr-2">Edit</a>
+        {% endif %}
         <a href="{{ path('app_micro_post_comment', {post: post.id}) }}">Comment</a>
         <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700">{{ post.comments.count }}</span>
     </div>
